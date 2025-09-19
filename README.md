@@ -23,11 +23,20 @@ Attendgov is a decentralized attendance tracking system designed to bring transp
 - **Reporting System**: Generate comprehensive attendance reports for public disclosure
 - **Audit Trail**: Complete immutable history of all attendance-related activities
 
+### Healthcare System Integration
+- **Hospital Registry**: Comprehensive management of government healthcare facilities
+- **Patient Referral System**: Streamlined patient transfer and care coordination
+- **Medical Staff Tracking**: Monitor healthcare worker attendance and availability
+- **Healthcare Transparency**: Public access to hospital performance and utilization data
+- **Quality Assurance**: Track patient outcomes and healthcare service delivery
+
 ## System Architecture
 
 ### Contracts
 1. **attendance-tracker.clar** - Core attendance recording and verification system
 2. **office-manager.clar** - Administrative functions for managing officials and duties
+3. **hospital-registry.clar** - Government healthcare facility management and verification
+4. **referral-core.clar** - Patient referral and care coordination system
 
 ### Key Components
 - Official registration and identity management
@@ -105,24 +114,132 @@ Deploy contracts to testnet/mainnet using Clarinet deployment scripts with prope
 
 ## Usage Examples
 
-### Register Government Official
+### Attendance Tracking System
+
+#### Register Government Official
 ```clarity
-(contract-call? .office-manager register-official official-id name department role)
+(contract-call? .attendance-tracker register-official 
+  "GOV001" 
+  "John Smith" 
+  "Health" 
+  "Director")
 ```
 
-### Check In for Duty
+#### Check In for Duty
 ```clarity
-(contract-call? .attendance-tracker check-in duty-id location-code)
+(contract-call? .attendance-tracker check-in 
+  u1 ;; duty-id
+  "BLDG-A-FL2") ;; location-code
 ```
 
-### Check Out from Duty
+#### Check Out from Duty
 ```clarity
-(contract-call? .attendance-tracker check-out duty-id completion-status)
+(contract-call? .attendance-tracker check-out 
+  u1 ;; duty-id
+  u1) ;; completion-status
 ```
 
-### Check Official's Current Status
+#### Check Official's Current Status
 ```clarity
-(contract-call? .attendance-tracker get-official-status official-id)
+(contract-call? .attendance-tracker get-official-status 'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7)
+```
+
+### Office Management System
+
+#### Create Department
+```clarity
+(contract-call? .office-manager create-department
+  "HEALTH"
+  "Department of Health"
+  'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7
+  u1000000) ;; budget-allocation
+```
+
+#### Assign Official Role
+```clarity
+(contract-call? .office-manager assign-official-role
+  'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7
+  "HEALTH"
+  "Chief Medical Officer"
+  u4 ;; role-level
+  (some 'SP1SUPERVISOR)
+  u8) ;; salary-grade
+```
+
+#### Submit Leave Request
+```clarity
+(contract-call? .office-manager submit-leave-request
+  u2 ;; leave-type (vacation)
+  u1000000 ;; start-date
+  u1000010 ;; end-date
+  "Annual vacation")
+```
+
+### Healthcare System
+
+#### Register Hospital
+```clarity
+(contract-call? .hospital-registry register-hospital
+  "City General Hospital"
+  "LIC123456"
+  u1 ;; hospital-type (public)
+  "123 Main St, City"
+  u500 ;; capacity
+  'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7
+  (list "Cardiology" "Neurology")
+  "Phone: 555-0123")
+```
+
+#### Update Hospital Services
+```clarity
+(contract-call? .hospital-registry update-hospital-services
+  u1 ;; hospital-id
+  true ;; emergency-services
+  true ;; surgery-facilities
+  u20 ;; icu-beds
+  true ;; maternity-ward
+  true ;; pediatric-care
+  false ;; mental-health
+  true ;; radiology
+  true ;; laboratory
+  true ;; pharmacy
+  true) ;; ambulance-service
+```
+
+### Patient Referral System
+
+#### Submit Patient Referral
+```clarity
+(contract-call? .referral-core submit-referral
+  "PAT001"
+  "Jane Doe"
+  u45 ;; patient-age
+  u2 ;; target-hospital
+  "Cardiac arrhythmia"
+  u2 ;; urgency-level (high)
+  "Patient requires specialized cardiac care"
+  "Cardiology")
+```
+
+#### Process Referral
+```clarity
+(contract-call? .referral-core process-referral
+  u1 ;; referral-id
+  true ;; accept
+  "Referral accepted, scheduling for tomorrow")
+```
+
+#### Update Patient Medical Data
+```clarity
+(contract-call? .referral-core update-patient-medical-data
+  "PAT001"
+  "A+" ;; blood-type
+  "Penicillin allergy"
+  "Hypertension, Diabetes Type 2"
+  "Metformin, Lisinopril"
+  "Emergency Contact: John Doe 555-0199"
+  "Insurance: Government Health Plan"
+  "Previous cardiac episodes in 2020, 2022")
 ```
 
 ## Compliance & Security
