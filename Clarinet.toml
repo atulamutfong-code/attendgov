@@ -10,10 +10,20 @@ path = 'contracts/attendance-tracker.clar'
 clarity_version = 3
 epoch = '3.2'
 
+[contracts.hospital-registry]
+path = 'contracts/hospital-registry.clar'
+clarity_version = 3
+epoch = '3.2'
+
 [contracts.office-manager]
 path = 'contracts/office-manager.clar'
 clarity_version = 3
-epoch = 'latest'
+epoch = '3.2'
+
+[contracts.referral-core]
+path = 'contracts/referral-core.clar'
+clarity_version = 3
+epoch = '3.2'
 [repl.analysis]
 passes = ['check_checker']
 
